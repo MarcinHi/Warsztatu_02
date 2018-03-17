@@ -66,7 +66,7 @@ public class UserDao {
 	public void saveToDB(Connection conn) throws SQLException {
 		if (this.id == 0) {
 			String sql = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
-			String generatedColumns[] = { "ID" };
+			String generatedColumns[] = { "id" };
 			PreparedStatement preparedStatement;
 			preparedStatement = conn.prepareStatement(sql, generatedColumns);
 			preparedStatement.setString(1, this.username);
@@ -126,6 +126,23 @@ public class UserDao {
 
 	public String getPassword() {
 		return password;
+	}
+	
+	public List<UserDao> loadAllByGrupId(int id, Connection conn) throws SQLException{
+		List<UserDao> list = new ArrayList<>();
+		String sql = "SELECT * FROM users WHERE person_group_id = ?";
+		PreparedStatement preStm = conn.prepareStatement(sql);
+		preStm.setInt(1, id);
+		ResultSet rs = preStm.executeQuery();
+		while(rs.next()) {
+			UserDao loadedUser = new UserDao();
+			loadedUser.id = rs.getInt("id");
+			loadedUser.username = rs.getString("username");
+			loadedUser.email = rs.getString("email");
+			loadedUser.password = rs.getString("password");
+			list.add(loadedUser);
+		}
+		return list;
 	}
 
 }
