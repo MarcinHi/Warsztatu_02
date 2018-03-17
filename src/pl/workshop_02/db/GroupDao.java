@@ -11,10 +11,12 @@ public class GroupDao {
 	private int id;
 	private String name;
 	
-	public GroupDao(String name) {
-		this.name = name;
-	}
 	public GroupDao() {
+	}
+
+	public GroupDao(int id, String name) {
+		this.name = name;
+		this.id = id;
 	}
 
 	public int getId() {
@@ -70,7 +72,7 @@ public class GroupDao {
 				this.id = rs.getInt(1);
 			}
 		} else {
-			String sql = "UPDATE	user_group	SET	name=?,	where	id	=	?";
+			String sql = "UPDATE user_group SET name=? where id = ?";
 			PreparedStatement preparedStatement;
 			preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, this.name);
