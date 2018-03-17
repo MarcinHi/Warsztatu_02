@@ -13,6 +13,8 @@ import pl.workshop_02.db.UserDao;
 
 public class MainProgram1 {
 
+	//Admin controller for the user
+	
 	public static void main(String[] args) {
 		BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Witaj w programie 1.");
