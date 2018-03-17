@@ -68,9 +68,9 @@ public class MainProgram2 {
 		String response = "";
 
 		System.out.println("Wybierz jedna z opcji:");
-		System.out.println("add    - dodanie uzytkownika");
-		System.out.println("edit   - edycja uzytkownika");
-		System.out.println("delete - usuniecie uzytkownika");
+		System.out.println("add    - dodanie zadania");
+		System.out.println("edit   - edycja zadania");
+		System.out.println("delete - usuniecie zadania");
 		System.out.println("quit   - zakonczenie programu");
 		System.out.println("Wpisz komende i nacisnij enter:");
 
@@ -95,7 +95,7 @@ public class MainProgram2 {
 			read.readLine();
 
 		} catch (IOException | SQLException e) {
-			System.out.println("add User ERROR");
+			System.out.println("add Exercise ERROR");
 			e.printStackTrace();
 		}
 
@@ -118,7 +118,7 @@ public class MainProgram2 {
 			read.readLine();
 
 		} catch (IOException | SQLException e) {
-			System.out.println("edit User ERROR");
+			System.out.println("edit Exercise ERROR");
 			e.printStackTrace();
 		}
 
@@ -134,7 +134,7 @@ public class MainProgram2 {
 			read.readLine();
 
 		} catch (IOException | SQLException e) {
-			System.out.println("delete User ERROR");
+			System.out.println("delete Exercise ERROR");
 			e.printStackTrace();
 		}
 
