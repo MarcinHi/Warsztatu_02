@@ -1,7 +1,6 @@
 package pl.workshop_02.db;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,64 +15,68 @@ public class SolutionDao {
 	private String description;
 	private int exerciseId;
 	private int usersId;
-	
+
 	public SolutionDao() {
 	}
 
-	public SolutionDao(String created, String updated, String description, int exerciseId, int usersId) {
+	public SolutionDao(int id, String created, String updated, String description, int exerciseId, int usersId) {
+		this.id = id;
 		this.created = created;
 		this.updated = updated;
 		this.description = description;
 		this.exerciseId = exerciseId;
 		this.usersId = usersId;
 	}
-	
+
 	public String getCreated() {
 		return created;
 	}
-	
+
 	public void setCreated(String created) {
 		this.created = created;
 	}
-	
+
 	public String getUpdated() {
 		return updated;
 	}
-	
+
 	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public int getExerciseId() {
 		return exerciseId;
 	}
-	
+
 	public void setExerciseId(int exerciseId) {
 		this.exerciseId = exerciseId;
 	}
+
 	public int getUsersId() {
 		return usersId;
 	}
+
 	public void setUsersId(int usersId) {
 		this.usersId = usersId;
 	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
+
 	public int getId() {
 		return id;
 	}
 	
+	//this setter only because of exercise requirement. Normally should not be created.
+	public void setSolutionId(int id) {
+		this.id = id;
+	}
+
 	static public List<SolutionDao> loadAllSolutions(Connection conn) throws SQLException {
 		String sql = "SELECT * FROM solution";
 		List<SolutionDao> solutions = new ArrayList<>();
@@ -128,8 +131,7 @@ public class SolutionDao {
 			preparedStatement.setString(3, this.description);
 			preparedStatement.setInt(4, this.exerciseId);
 			preparedStatement.setInt(5, this.usersId);
-			
-			
+
 			preparedStatement.executeUpdate();
 			ResultSet rs = preparedStatement.getGeneratedKeys();
 			if (rs.next()) {
@@ -149,7 +151,6 @@ public class SolutionDao {
 		}
 	}
 
-
 	public void delete(Connection conn) throws SQLException {
 		if (this.id != 0) {
 			String sql = "DELETE	FROM	solution WHERE	id=	?";
@@ -160,16 +161,16 @@ public class SolutionDao {
 			this.id = 0;
 		}
 	}
-	
-	public List<SolutionDao> loadAllByExerciseId(int id, Connection conn) throws SQLException{
+
+	public List<SolutionDao> loadAllByExerciseId(int id, Connection conn) throws SQLException {
 		List<SolutionDao> list = new ArrayList<>();
 		String sql = "SELECT * FROM solution WHERE exercise_id = ? ORDER BY updated DESC";
 		PreparedStatement preStm = conn.prepareStatement(sql);
 		preStm.setInt(1, id);
 		ResultSet rs = preStm.executeQuery();
-		while(rs.next()) {
+		while (rs.next()) {
 			SolutionDao loadedSolution = new SolutionDao();
-			loadedSolution.setId(rs.getInt("id"));
+			loadedSolution.id = rs.getInt("id");
 			loadedSolution.setCreated(rs.getString("created"));
 			loadedSolution.setUpdated(rs.getString("updated"));
 			loadedSolution.setDescription("description");
