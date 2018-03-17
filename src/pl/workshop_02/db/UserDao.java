@@ -14,22 +14,19 @@ public class UserDao {
 	private String username;
 	private String password;
 	private String email;
-
-	public UserDao(String username, String password, String email) {
-		this.username = username;
-		this.setPassword(password);
-		this.email = email;
-	}
+	private int group;
 
 	public UserDao() {
 	}
 
-	public UserDao(int id, String username, String password, String email) {
+	public UserDao(int id, String username, String password, String email, int group) {
 		this.id = id;
 		this.username = username;
 		this.setPassword(password);
 		this.email = email;
+		this.group = group;
 	}
+
 
 	static public List<UserDao> loadAllUsers(Connection conn) throws SQLException {
 		String sql = "SELECT * FROM users";
@@ -42,6 +39,7 @@ public class UserDao {
 			loadedUser.username = rs.getString("username");
 			loadedUser.email = rs.getString("email");
 			loadedUser.password = rs.getString("password");
+			loadedUser.group = rs.getInt("person_group_id");
 			users.add(loadedUser);
 		}
 		return users;
@@ -58,6 +56,7 @@ public class UserDao {
 			loadedUser.username = rs.getString("username");
 			loadedUser.email = rs.getString("email");
 			loadedUser.password = rs.getString("password");
+			loadedUser.group = rs.getInt("person_group_id");
 			return loadedUser;
 		}
 		return null;
@@ -65,26 +64,28 @@ public class UserDao {
 
 	public void saveToDB(Connection conn) throws SQLException {
 		if (this.id == 0) {
-			String sql = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO users(username, email, password, person_group_id) VALUES (?, ?, ?, ?)";
 			String generatedColumns[] = { "id" };
 			PreparedStatement preparedStatement;
 			preparedStatement = conn.prepareStatement(sql, generatedColumns);
 			preparedStatement.setString(1, this.username);
 			preparedStatement.setString(2, this.email);
 			preparedStatement.setString(3, this.password);
+			preparedStatement.setInt(4, this.group);
 			preparedStatement.executeUpdate();
 			ResultSet rs = preparedStatement.getGeneratedKeys();
 			if (rs.next()) {
 				this.id = rs.getInt(1);
 			}
 		} else {
-			String sql = "UPDATE	users	SET	username=?,	email=?,	password=?	where	id	=	?";
+			String sql = "UPDATE	users	SET	username=?,	email=?, password=?, person_group_id=?	where	id=?";
 			PreparedStatement preparedStatement;
 			preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, this.username);
 			preparedStatement.setString(2, this.email);
 			preparedStatement.setString(3, this.password);
-			preparedStatement.setInt(4, this.id);
+			preparedStatement.setInt(4, this.group);
+			preparedStatement.setInt(5, this.id);
 			preparedStatement.executeUpdate();
 		}
 	}
@@ -127,14 +128,22 @@ public class UserDao {
 	public String getPassword() {
 		return password;
 	}
-	
-	public List<UserDao> loadAllByGrupId(int id, Connection conn) throws SQLException{
+
+	public int getGroup() {
+		return group;
+	}
+
+	public void setGroup(int group) {
+		this.group = group;
+	}
+
+	public List<UserDao> loadAllByGrupId(int id, Connection conn) throws SQLException {
 		List<UserDao> list = new ArrayList<>();
 		String sql = "SELECT * FROM users WHERE person_group_id = ?";
 		PreparedStatement preStm = conn.prepareStatement(sql);
 		preStm.setInt(1, id);
 		ResultSet rs = preStm.executeQuery();
-		while(rs.next()) {
+		while (rs.next()) {
 			UserDao loadedUser = new UserDao();
 			loadedUser.id = rs.getInt("id");
 			loadedUser.username = rs.getString("username");
