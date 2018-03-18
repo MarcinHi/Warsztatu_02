@@ -72,6 +72,10 @@ public class SolutionDao {
 		return id;
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	//this setter only because of exercise requirement. Normally should not be created.
 	public void setSolutionId(int id) {
 		this.id = id;
